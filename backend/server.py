@@ -429,46 +429,6 @@ def format_decimal(value: str) -> str:
         return f"{float(value):.2f}"
     except (ValueError, TypeError):
         return "0.00"
-    dates = [inv.get('data_sprzedazy') or inv.get('data_wystawienia') for inv in all_invoices if inv.get('data_sprzedazy') or inv.get('data_wystawienia')]
-    if dates:
-        dates = sorted([d for d in dates if d])
-        data_od.text = dates[0] if dates else datetime.now().strftime('%Y-%m-01')
-        data_do.text = dates[-1] if dates else datetime.now().strftime('%Y-%m-%d')
-    else:
-        data_od.text = datetime.now().strftime('%Y-%m-01')
-        data_do.text = datetime.now().strftime('%Y-%m-%d')
-    
-    # Add subject
-    podmiot = etree.SubElement(root, 'Podmiot1')
-    podmiot_id = etree.SubElement(podmiot, 'IdentyfikatorPodmiotu')
-    nip = etree.SubElement(podmiot_id, '{http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2021/06/08/eD/DefinicjeTypy/}NIP')
-    nip.text = data.get('subject', {}).get('nip', '')
-    nazwa = etree.SubElement(podmiot_id, '{http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2021/06/08/eD/DefinicjeTypy/}PelnaNazwa')
-    nazwa.text = data.get('subject', {}).get('nazwa', '')
-    
-    # Add invoices
-    for idx, inv in enumerate(all_invoices, 1):
-        faktura = etree.SubElement(root, 'Faktura')
-        
-        # Invoice header
-        kod_waluty = etree.SubElement(faktura, 'KodWaluty')
-        kod_waluty.text = 'PLN'
-        
-        p1 = etree.SubElement(faktura, 'P_1')
-        p1.text = inv.get('data_wystawienia', datetime.now().strftime('%Y-%m-%d'))
-        
-        p2a = etree.SubElement(faktura, 'P_2A')
-        p2a.text = inv.get('dowod_sprzedazy', f'FV/{idx}/2024')
-        
-        # Buyer info
-        p3a = etree.SubElement(faktura, 'P_3A')
-        p3a.text = inv.get('nazwa_kontrahenta', '')
-        
-        p3b = etree.SubElement(faktura, 'P_3B')
-        p3b.text = ''  # Address - not available in JPK_VAT
-        
-        p3c = etree.SubElement(faktura, 'P_3C')
-        p3c.text = inv.get('nip_kontrahenta', '')
         
         # Amounts
         p_13_1 = etree.SubElement(faktura, 'P_13_1')
