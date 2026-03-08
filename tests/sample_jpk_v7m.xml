@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:JPK xmlns:kk="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2023/09/06/eD/KodyKrajow/" xmlns:kus="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/KodyUrzedowSkarbowych/" xmlns:etd="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/09/13/eD/DefinicjeTypy/" xmlns:tns="http://crd.gov.pl/wzor/2025/12/19/14090/">
+<tns:Naglowek>
+<tns:KodFormularza kodSystemowy="JPK_V7M (3)" wersjaSchemy="1-0E">JPK_VAT</tns:KodFormularza>
+<tns:WariantFormularza>3</tns:WariantFormularza>
+<tns:DataWytworzeniaJPK>2026-03-02T11:08:35.2670789+01:00</tns:DataWytworzeniaJPK>
+<tns:NazwaSystemu>ELISOFT</tns:NazwaSystemu>
+<tns:CelZlozenia poz="P_7">1</tns:CelZlozenia>
+<tns:KodUrzedu>0404</tns:KodUrzedu>
+<tns:Rok>2026</tns:Rok>
+<tns:Miesiac>2</tns:Miesiac>
+</tns:Naglowek>
+<tns:Podmiot1 rola="Podatnik">
+<tns:OsobaNiefizyczna>
+<tns:NIP>1234567890</tns:NIP>
+<tns:PelnaNazwa>PRZYKŁADOWA FIRMA SP. Z O.O.</tns:PelnaNazwa>
+<tns:Email>test@example.pl</tns:Email>
+<tns:Telefon>123456789</tns:Telefon>
+</tns:OsobaNiefizyczna>
+</tns:Podmiot1>
+<tns:Deklaracja>
+<tns:Naglowek>
+<tns:KodFormularzaDekl kodSystemowy="VAT-7 (23)" kodPodatku="VAT" rodzajZobowiazania="Z" wersjaSchemy="1-0E">VAT-7</tns:KodFormularzaDekl>
+<tns:WariantFormularzaDekl>23</tns:WariantFormularzaDekl>
+</tns:Naglowek>
+<tns:PozycjeSzczegolowe>
+<tns:P_19>62050</tns:P_19>
+<tns:P_20>14272</tns:P_20>
+<tns:P_37>62050</tns:P_37>
+<tns:P_38>14272</tns:P_38>
+<tns:P_51>14272</tns:P_51>
+<tns:P_53>0</tns:P_53>
+<tns:P_62>0</tns:P_62>
+</tns:PozycjeSzczegolowe>
+<tns:Pouczenia>1</tns:Pouczenia>
+</tns:Deklaracja>
+<tns:Ewidencja>
+<tns:SprzedazWiersz>
+<tns:LpSprzedazy>1</tns:LpSprzedazy>
+<tns:NrKontrahenta>5210421928</tns:NrKontrahenta>
+<tns:NazwaKontrahenta>STRABAG SP. Z O.O.</tns:NazwaKontrahenta>
+<tns:DowodSprzedazy>FV 16/NAJEM/2026</tns:DowodSprzedazy>
+<tns:DataWystawienia>2026-02-01</tns:DataWystawienia>
+<tns:BFK>1</tns:BFK>
+<tns:K_19>8200.0</tns:K_19>
+<tns:K_20>1886.0</tns:K_20>
+</tns:SprzedazWiersz>
+<tns:SprzedazWiersz>
+<tns:LpSprzedazy>2</tns:LpSprzedazy>
+<tns:NrKontrahenta>5210421928</tns:NrKontrahenta>
+<tns:NazwaKontrahenta>STRABAG SP. Z O.O.</tns:NazwaKontrahenta>
+<tns:DowodSprzedazy>FV 15/NAJEM/2026</tns:DowodSprzedazy>
+<tns:DataWystawienia>2026-02-01</tns:DataWystawienia>
+<tns:BFK>1</tns:BFK>
+<tns:K_19>8200.0</tns:K_19>
+<tns:K_20>1886.0</tns:K_20>
+</tns:SprzedazWiersz>
+<tns:SprzedazWiersz>
+<tns:LpSprzedazy>3</tns:LpSprzedazy>
+<tns:NrKontrahenta>7820021306</tns:NrKontrahenta>
+<tns:NazwaKontrahenta>AMS S.A.</tns:NazwaKontrahenta>
+<tns:DowodSprzedazy>FV 14/NAJEM/2026</tns:DowodSprzedazy>
+<tns:DataWystawienia>2026-02-01</tns:DataWystawienia>
+<tns:BFK>1</tns:BFK>
+<tns:K_19>500.0</tns:K_19>
+<tns:K_20>115.0</tns:K_20>
+</tns:SprzedazWiersz>
+<tns:SprzedazCtrl>
+<tns:LiczbaWierszySprzedazy>3</tns:LiczbaWierszySprzedazy>
+<tns:PodatekNalezny>3887</tns:PodatekNalezny>
+</tns:SprzedazCtrl>
+</tns:Ewidencja>
+</tns:JPK>
