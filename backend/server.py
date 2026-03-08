@@ -131,14 +131,14 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
         pass
     
     # Extract sales records (SprzedazWiersz)
-    sales_rows = root.findall('.//{*}SprzedazWiersz')
+    sales_rows = root.findall('.//*[local-name()="SprzedazWiersz"]')
     for row in sales_rows:
         invoice = extract_invoice_data(row, 'sale')
         if invoice:
             result['invoices_sale'].append(invoice)
     
     # Extract purchase records (ZakupWiersz)
-    purchase_rows = root.findall('.//{*}ZakupWiersz')
+    purchase_rows = root.findall('.//*[local-name()="ZakupWiersz"]')
     for row in purchase_rows:
         invoice = extract_invoice_data(row, 'purchase')
         if invoice:
