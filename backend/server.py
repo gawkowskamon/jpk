@@ -82,14 +82,7 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
     
     # Detect namespace
     nsmap = root.nsmap
-    ns = None
-    for prefix, uri in nsmap.items():
-        if 'crd.gov.pl' in uri or 'mf.gov.pl' in uri:
-            ns = {'ns': uri}
-            break
-    
-    if ns is None:
-        ns = {'ns': nsmap.get(None, '')}
+    default_ns = nsmap.get(None, '')
     
     result = {
         'version': 'VAT(4)',
@@ -103,11 +96,23 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
     
     # Try to extract header info
     try:
-        header = root.find('.//ns:Naglowek', ns)
+        # Try with namespace first, then without
+        header = None
+        if default_ns:
+            header = root.find(f'.//{{{default_ns}}}Naglowek')
         if header is None:
-            header = root.find('.//*[local-name()="Naglowek"]')
+            # Search all elements for Naglowek
+            for elem in root.iter():
+                if elem.tag.endswith('Naglowek'):
+                    header = elem
+                    break
+        
         if header is not None:
-            kod_formularza = header.find('.//*[local-name()="KodFormularza"]')
+            kod_formularza = None
+            for elem in header.iter():
+                if elem.tag.endswith('KodFormularza'):
+                    kod_formularza = elem
+                    break
             if kod_formularza is not None:
                 result['version'] = kod_formularza.get('wersjaSchemy', 'VAT(4)')
     except Exception:
@@ -115,14 +120,27 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
     
     # Try to extract subject info
     try:
-        podmiot = root.find('.//ns:Podmiot1', ns)
+        podmiot = None
+        if default_ns:
+            podmiot = root.find(f'.//{{{default_ns}}}Podmiot1')
         if podmiot is None:
-            podmiot = root.find('.//*[local-name()="Podmiot1"]')
+            # Search all elements for Podmiot1
+            for elem in root.iter():
+                if elem.tag.endswith('Podmiot1'):
+                    podmiot = elem
+                    break
+        
         if podmiot is not None:
-            nip = podmiot.find('.//*[local-name()="NIP"]')
-            nazwa = podmiot.find('.//*[local-name()="PelnaNazwa"]')
-            if nazwa is None:
-                nazwa = podmiot.find('.//*[local-name()="Nazwa"]')
+            nip = None
+            nazwa = None
+            for elem in podmiot.iter():
+                if elem.tag.endswith('NIP'):
+                    nip = elem
+                elif elem.tag.endswith('PelnaNazwa'):
+                    nazwa = elem
+                elif elem.tag.endswith('Nazwa') and nazwa is None:
+                    nazwa = elem
+            
             result['subject'] = {
                 'nip': nip.text if nip is not None else '',
                 'nazwa': nazwa.text if nazwa is not None else ''
@@ -131,14 +149,22 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
         pass
     
     # Extract sales records (SprzedazWiersz)
-    sales_rows = root.findall('.//*[local-name()="SprzedazWiersz"]')
+    sales_rows = []
+    for elem in root.iter():
+        if elem.tag.endswith('SprzedazWiersz'):
+            sales_rows.append(elem)
+    
     for row in sales_rows:
         invoice = extract_invoice_data(row, 'sale')
         if invoice:
             result['invoices_sale'].append(invoice)
     
     # Extract purchase records (ZakupWiersz)
-    purchase_rows = root.findall('.//*[local-name()="ZakupWiersz"]')
+    purchase_rows = []
+    for elem in root.iter():
+        if elem.tag.endswith('ZakupWiersz'):
+            purchase_rows.append(elem)
+    
     for row in purchase_rows:
         invoice = extract_invoice_data(row, 'purchase')
         if invoice:
