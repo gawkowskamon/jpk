@@ -243,22 +243,23 @@ def extract_jpk_fa_invoice(elem) -> dict:
     return data
 
 def extract_invoice_data(row, invoice_type: str) -> dict:
-    """Extract invoice data from XML row"""
+    """Extract invoice data from XML row - supports JPK_VAT and JPK_V7M formats"""
     data = {
         'type': invoice_type,
         'lp': get_xml_text(row, 'LpSprzedazy') or get_xml_text(row, 'LpZakupu') or '',
-        'nip_kontrahenta': get_xml_text(row, 'NrKontrahenta') or '',
+        'nip_kontrahenta': get_xml_text(row, 'NrKontrahenta') or get_xml_text(row, 'KodKrajuNadaniaTIN') or '',
         'nazwa_kontrahenta': get_xml_text(row, 'NazwaKontrahenta') or '',
-        'dowod_sprzedazy': get_xml_text(row, 'DowodSprzedazy') or get_xml_text(row, 'DowodZakupu') or '',
+        'dowod_sprzedazy': get_xml_text(row, 'DowodSprzedazy') or get_xml_text(row, 'DowodZakupu') or get_xml_text(row, 'NrDokumentu') or '',
         'data_wystawienia': get_xml_text(row, 'DataWystawienia') or '',
         'data_sprzedazy': get_xml_text(row, 'DataSprzedazy') or get_xml_text(row, 'DataZakupu') or '',
-        'k_19': get_xml_text(row, 'K_19') or '0',  # Podstawa opodatkowania 23%
-        'k_20': get_xml_text(row, 'K_20') or '0',  # VAT 23%
-        'k_17': get_xml_text(row, 'K_17') or '0',  # Podstawa opodatkowania 8%
-        'k_18': get_xml_text(row, 'K_18') or '0',  # VAT 8%
-        'k_15': get_xml_text(row, 'K_15') or '0',  # Podstawa opodatkowania 5%
-        'k_16': get_xml_text(row, 'K_16') or '0',  # VAT 5%
-        'k_10': get_xml_text(row, 'K_10') or '0',  # Wartość netto ZW
+        # JPK_V7M uses different K_ fields
+        'k_19': get_xml_text(row, 'K_19') or get_xml_text(row, 'K_13') or '0',  # Podstawa 23%
+        'k_20': get_xml_text(row, 'K_20') or get_xml_text(row, 'K_16') or '0',  # VAT 23%
+        'k_17': get_xml_text(row, 'K_17') or get_xml_text(row, 'K_12') or '0',  # Podstawa 8%
+        'k_18': get_xml_text(row, 'K_18') or get_xml_text(row, 'K_17') or '0',  # VAT 8%
+        'k_15': get_xml_text(row, 'K_15') or get_xml_text(row, 'K_11') or '0',  # Podstawa 5%
+        'k_16': get_xml_text(row, 'K_16') or get_xml_text(row, 'K_14') or '0',  # VAT 5%
+        'k_10': get_xml_text(row, 'K_10') or '0',  # Wartość netto 0%/ZW
         'kwota_netto': '0',
         'kwota_vat': '0',
         'kwota_brutto': '0'
