@@ -259,9 +259,9 @@ def convert_to_jpk_fa(data: dict, target_version: str = "FA(4)") -> bytes:
     # Add subject
     podmiot = etree.SubElement(root, 'Podmiot1')
     podmiot_id = etree.SubElement(podmiot, 'IdentyfikatorPodmiotu')
-    nip = etree.SubElement(podmiot_id, 'etd:NIP')
+    nip = etree.SubElement(podmiot_id, '{http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2021/06/08/eD/DefinicjeTypy/}NIP')
     nip.text = data.get('subject', {}).get('nip', '')
-    nazwa = etree.SubElement(podmiot_id, 'etd:PelnaNazwa')
+    nazwa = etree.SubElement(podmiot_id, '{http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2021/06/08/eD/DefinicjeTypy/}PelnaNazwa')
     nazwa.text = data.get('subject', {}).get('nazwa', '')
     
     # Add invoices
