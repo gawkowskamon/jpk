@@ -1,0 +1,155 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "JPK Converter Pro",
+      "tone": "Professional, Efficient, Trustworthy, Technical",
+      "target_audience": "Accountants, Financial Professionals",
+      "theme_mode": "light"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Manrope, sans-serif",
+        "body": "Inter, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "scale": {
+        "h1": "text-4xl font-bold tracking-tight text-slate-900",
+        "h2": "text-3xl font-semibold tracking-tight text-slate-900",
+        "h3": "text-2xl font-semibold tracking-tight text-slate-900",
+        "body_large": "text-lg text-slate-700 leading-relaxed",
+        "body_default": "text-base text-slate-600 leading-relaxed",
+        "caption": "text-sm text-slate-500",
+        "mono_code": "font-mono text-sm text-slate-700 bg-slate-100 px-1 py-0.5 rounded"
+      },
+      "imports": [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+      ]
+    },
+    "colors": {
+      "primary": {
+        "DEFAULT": "#0F172A",
+        "foreground": "#F8FAFC",
+        "hover": "#1E293B",
+        "description": "Deep Navy Blue - Used for primary actions, headers, and branding."
+      },
+      "secondary": {
+        "DEFAULT": "#F97316",
+        "foreground": "#FFFFFF",
+        "hover": "#EA580C",
+        "description": "Muted Orange - Used for accents, call-to-actions, and highlights."
+      },
+      "background": {
+        "DEFAULT": "#F8FAFC",
+        "paper": "#FFFFFF",
+        "subtle": "#F1F5F9"
+      },
+      "text": {
+        "primary": "#0F172A",
+        "secondary": "#64748B",
+        "muted": "#94A3B8"
+      },
+      "status": {
+        "success": "#10B981",
+        "warning": "#F59E0B",
+        "error": "#EF4444",
+        "info": "#3B82F6"
+      },
+      "border": "#E2E8F0"
+    },
+    "layout": {
+      "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+      "spacing": {
+        "section": "py-12",
+        "component": "p-6"
+      },
+      "radius": {
+        "default": "rounded-lg",
+        "button": "rounded-md",
+        "card": "rounded-xl"
+      },
+      "shadows": {
+        "card": "shadow-sm hover:shadow-md transition-shadow duration-200",
+        "dropdown": "shadow-lg ring-1 ring-black ring-opacity-5"
+      }
+    },
+    "components": {
+      "buttons": {
+        "primary": "bg-slate-900 text-white hover:bg-slate-800 shadow-sm",
+        "secondary": "bg-white text-slate-900 border border-slate-200 hover:bg-slate-50 shadow-sm",
+        "accent": "bg-orange-500 text-white hover:bg-orange-600 shadow-sm",
+        "ghost": "hover:bg-slate-100 text-slate-700"
+      },
+      "cards": {
+        "base": "bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden",
+        "header": "px-6 py-4 border-b border-slate-100 bg-slate-50/50",
+        "body": "p-6"
+      },
+      "inputs": {
+        "base": "flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      },
+      "tables": {
+        "wrapper": "relative w-full overflow-auto rounded-md border border-slate-200",
+        "header": "bg-slate-50 text-slate-500 font-medium text-xs uppercase tracking-wider",
+        "row": "border-b border-slate-100 hover:bg-slate-50/50 transition-colors",
+        "cell": "p-4 align-middle [&:has([role=checkbox])]:pr-0 text-sm text-slate-700"
+      }
+    },
+    "visual_enhancers": {
+      "glassmorphism": "backdrop-blur-md bg-white/70 border border-white/20 shadow-xl",
+      "gradients": {
+        "subtle_mesh": "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-100 via-slate-50 to-white"
+      }
+    },
+    "assets": {
+      "images": [
+        {
+          "category": "background",
+          "url": "https://images.unsplash.com/photo-1764083292901-bd84dea585aa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMG5hdnklMjBibHVlJTIwYmFja2dyb3VuZCUyMG1pbmltYWxpc3R8ZW58MHx8fHwxNzcyOTc1NjI5fDA&ixlib=rb-4.1.0&q=85",
+          "description": "Abstract geometric navy blue background for login or hero sections."
+        },
+        {
+          "category": "empty_state",
+          "url": "https://images.unsplash.com/photo-1610641563856-4ec0223d7084?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwb2ZmaWNlJTIwZGVzayUyMHRlY2hub2xvZ3l8ZW58MHx8fHwxNzcyOTc1NjMzfDA&ixlib=rb-4.1.0&q=85",
+          "description": "Minimalist office desk for empty states or dashboard placeholders."
+        }
+      ],
+      "icons": {
+        "library": "lucide-react",
+        "preferred_icons": ["FileText", "UploadCloud", "CheckCircle2", "AlertTriangle", "History", "Settings", "Download", "FileJson", "ArrowRightLeft"]
+      }
+    }
+  },
+  "implementation_guide": {
+    "steps": [
+      "1. Setup Tailwind config with custom colors (Navy/Orange) and fonts (Manrope/Inter/JetBrains).",
+      "2. Create a 'Layout' component with a Sidebar and Topbar.",
+      "3. Build the 'FileUploader' component using 'react-dropzone' styling it with a large dashed border and the accent color.",
+      "4. Implement the 'ConversionPreview' table using Shadcn Table component, ensuring sticky headers for large datasets.",
+      "5. Create the 'History' page with a filterable list of past conversions.",
+      "6. Ensure all interactive elements have 'data-testid' attributes."
+    ],
+    "rules": [
+      "Use 'Manrope' for all headings to give a modern, technical feel.",
+      "Use 'JetBrains Mono' for any XML snippets, file paths, or ID numbers.",
+      "Primary buttons must be Navy Blue (#0F172A).",
+      "Accent elements (like active tabs or progress bars) should use Muted Orange (#F97316).",
+      "Ensure high contrast for text. Avoid light gray text on white backgrounds.",
+      "Do not use gradients for backgrounds; stick to clean, solid colors or very subtle mesh gradients.",
+      "All forms must use Shadcn UI components (Input, Select, Checkbox) customized to the theme."
+    ]
+  },
+  "universal_guidelines": {
+    "do_not": [
+      "Do not use 'Inter' for headings.",
+      "Do not use generic centered layouts for the dashboard.",
+      "Do not use gradients for text.",
+      "Do not use 'transparent' backgrounds for dropdowns or modals."
+    ],
+    "must_do": [
+      "Add 'data-testid' to all interactive elements.",
+      "Use 'sonner' for toast notifications.",
+      "Ensure mobile responsiveness for all tables (use horizontal scroll).",
+      "Use 'lucide-react' for icons."
+    ]
+  }
+}
