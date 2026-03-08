@@ -208,14 +208,11 @@ def extract_invoice_data(row, invoice_type: str) -> dict:
 
 def get_xml_text(element, tag_name: str) -> Optional[str]:
     """Get text content from XML element by tag name"""
-    ns = element.nsmap.get(None, "")
-    if ns:
-        found = element.find(f'.//{{{ns}}}{tag_name}')
-    else:
-        found = element.find(f'.//{tag_name}')
-    if found is None:
-        found = element.find(f'.//*[local-name()="{tag_name}"]')
-    return found.text if found is not None else None
+    # Search through all child elements
+    for elem in element.iter():
+        if elem.tag.endswith(tag_name):
+            return elem.text
+    return None
 
 def convert_to_jpk_fa(data: dict, target_version: str = "FA(4)") -> bytes:
     """Convert parsed JPK_VAT data to JPK_FA XML format"""
