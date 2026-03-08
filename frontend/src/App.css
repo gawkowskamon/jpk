@@ -1,34 +1,207 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
-}
-
-.App-header {
-    background-color: #0f0f10;
+/* Main App Styles */
+.app-container {
     min-height: 100vh;
+    background-color: #F8FAFC;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 40;
+}
+
+.sidebar-logo {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-nav {
+    padding: 1rem 0;
+}
+
+.sidebar-link {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    color: #94A3B8;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 0.9375rem;
+    font-weight: 500;
+}
+
+.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #F8FAFC;
+}
+
+.sidebar-link.active {
+    background-color: rgba(249, 115, 22, 0.1);
+    color: #F97316;
+    border-left: 3px solid #F97316;
+}
+
+/* Main content */
+.main-content {
+    margin-left: 280px;
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+/* File uploader */
+.file-uploader {
+    border: 2px dashed #E2E8F0;
+    border-radius: 1rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: white;
+    cursor: pointer;
+}
+
+.file-uploader:hover {
+    border-color: #F97316;
+    background-color: rgba(249, 115, 22, 0.02);
+}
+
+.file-uploader.drag-active {
+    border-color: #F97316;
+    background-color: rgba(249, 115, 22, 0.05);
+    transform: scale(1.01);
+}
+
+/* Cards */
+.card-elevated {
+    background: white;
+    border-radius: 0.75rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+}
+
+.card-elevated:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Stats card */
+.stats-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border: 1px solid #E2E8F0;
+}
+
+.stats-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.625rem;
+    display: flex;
     align-items: center;
     justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
 }
 
-.App-link {
-    color: #61dafb;
+.stats-card-icon.primary {
+    background-color: rgba(15, 23, 42, 0.1);
+    color: #0F172A;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
+.stats-card-icon.accent {
+    background-color: rgba(249, 115, 22, 0.1);
+    color: #F97316;
+}
+
+.stats-card-icon.success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+}
+
+/* Table styles */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    background-color: #F8FAFC;
+    padding: 0.875rem 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748B;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.data-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 0.875rem;
+    color: #334155;
+}
+
+.data-table tr:hover td {
+    background-color: rgba(241, 245, 249, 0.5);
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-badge.success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #059669;
+}
+
+.status-badge.error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #DC2626;
+}
+
+.status-badge.warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #D97706;
+}
+
+/* Page header */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-family: 'Manrope', sans-serif;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 0.5rem;
+}
+
+.page-description {
+    color: #64748B;
+    font-size: 1rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
     }
-    to {
-        transform: rotate(360deg);
+    
+    .main-content {
+        margin-left: 0;
     }
 }
