@@ -286,38 +286,149 @@ def get_xml_text(element, tag_name: str) -> Optional[str]:
     return None
 
 def convert_to_jpk_fa(data: dict, target_version: str = "FA(4)") -> bytes:
-    """Convert parsed JPK_VAT data to JPK_FA XML format"""
+    """Convert parsed JPK_V7M data to JPK_VAT (3) XML format compatible with Comarch Optima"""
     
-    # Create root element for JPK_FA
+    # Create root element for JPK_VAT (3) - format zgodny z Comarch Optima
     nsmap = {
-        None: 'http://crd.gov.pl/wzor/2021/11/29/11089/',
-        'etd': 'http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2021/06/08/eD/DefinicjeTypy/',
-        'xsi': 'http://www.w3.org/2001/XMLSchema-instance'
+        'tns': 'http://jpk.mf.gov.pl/wzor/2017/11/13/1113/',
+        'etd': 'http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2018/08/24/eD/DefinicjeTypy/'
     }
     
-    root = etree.Element('JPK', nsmap=nsmap)
+    tns = '{http://jpk.mf.gov.pl/wzor/2017/11/13/1113/}'
+    
+    root = etree.Element(f'{tns}JPK', nsmap=nsmap)
     
     # Add header
-    naglowek = etree.SubElement(root, 'Naglowek')
-    kod_form = etree.SubElement(naglowek, 'KodFormularza')
-    kod_form.text = 'JPK_FA'
-    kod_form.set('kodSystemowy', 'JPK_FA (4)')
-    kod_form.set('wersjaSchemy', '1-0')
+    naglowek = etree.SubElement(root, f'{tns}Naglowek')
     
-    wariant_form = etree.SubElement(naglowek, 'WariantFormularza')
-    wariant_form.text = '4'
+    kod_form = etree.SubElement(naglowek, f'{tns}KodFormularza')
+    kod_form.text = 'JPK_VAT'
+    kod_form.set('kodSystemowy', 'JPK_VAT (3)')
+    kod_form.set('wersjaSchemy', '1-1')
     
-    cel_zlozenia = etree.SubElement(naglowek, 'CelZlozenia')
-    cel_zlozenia.text = '1'
+    wariant_form = etree.SubElement(naglowek, f'{tns}WariantFormularza')
+    wariant_form.text = '3'
     
-    data_wytw = etree.SubElement(naglowek, 'DataWytworzeniaJPK')
-    data_wytw.text = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S')
+    cel_zlozenia = etree.SubElement(naglowek, f'{tns}CelZlozenia')
+    cel_zlozenia.text = '0'
     
-    data_od = etree.SubElement(naglowek, 'DataOd')
-    data_do = etree.SubElement(naglowek, 'DataDo')
+    data_wytw = etree.SubElement(naglowek, f'{tns}DataWytworzeniaJPK')
+    data_wytw.text = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.0')
     
     # Get date range from invoices
     all_invoices = data.get('invoices_sale', []) + data.get('invoices_purchase', [])
+    dates = [inv.get('data_sprzedazy') or inv.get('data_wystawienia') for inv in all_invoices if inv.get('data_sprzedazy') or inv.get('data_wystawienia')]
+    if dates:
+        dates = sorted([d for d in dates if d])
+        data_od_val = dates[0] if dates else datetime.now().strftime('%Y-%m-01')
+        data_do_val = dates[-1] if dates else datetime.now().strftime('%Y-%m-%d')
+    else:
+        data_od_val = datetime.now().strftime('%Y-%m-01')
+        data_do_val = datetime.now().strftime('%Y-%m-%d')
+    
+    data_od = etree.SubElement(naglowek, f'{tns}DataOd')
+    data_od.text = data_od_val
+    
+    data_do = etree.SubElement(naglowek, f'{tns}DataDo')
+    data_do.text = data_do_val
+    
+    nazwa_sys = etree.SubElement(naglowek, f'{tns}NazwaSystemu')
+    nazwa_sys.text = 'Konwerter JPK_V7M do JPK_VAT'
+    
+    # Add subject (Podmiot1)
+    podmiot = etree.SubElement(root, f'{tns}Podmiot1')
+    
+    nip_elem = etree.SubElement(podmiot, f'{tns}NIP')
+    nip_elem.text = data.get('subject', {}).get('nip', '')
+    
+    nazwa_elem = etree.SubElement(podmiot, f'{tns}PelnaNazwa')
+    nazwa_elem.text = data.get('subject', {}).get('nazwa', '')
+    
+    # Add sales rows (SprzedazWiersz)
+    for idx, inv in enumerate(data.get('invoices_sale', []), 1):
+        wiersz = etree.SubElement(root, f'{tns}SprzedazWiersz')
+        
+        lp = etree.SubElement(wiersz, f'{tns}LpSprzedazy')
+        lp.text = str(idx)
+        
+        nr_kontr = etree.SubElement(wiersz, f'{tns}NrKontrahenta')
+        nr_kontr.text = inv.get('nip_kontrahenta', '') or 'BRAK'
+        
+        nazwa_kontr = etree.SubElement(wiersz, f'{tns}NazwaKontrahenta')
+        nazwa_kontr.text = inv.get('nazwa_kontrahenta', '')
+        
+        adres_kontr = etree.SubElement(wiersz, f'{tns}AdresKontrahenta')
+        adres_kontr.text = inv.get('adres_kontrahenta', '') or ''
+        
+        dowod = etree.SubElement(wiersz, f'{tns}DowodSprzedazy')
+        dowod.text = inv.get('dowod_sprzedazy', '')
+        
+        data_wyst = etree.SubElement(wiersz, f'{tns}DataWystawienia')
+        data_wyst.text = inv.get('data_wystawienia', '')
+        
+        if inv.get('data_sprzedazy'):
+            data_sprz = etree.SubElement(wiersz, f'{tns}DataSprzedazy')
+            data_sprz.text = inv.get('data_sprzedazy', '')
+        
+        # K_10 - stawka 0%
+        k_10 = etree.SubElement(wiersz, f'{tns}K_10')
+        k_10.text = format_decimal(inv.get('k_10', '0'))
+        
+        # K_13 - not used in this format, set to 0
+        k_13 = etree.SubElement(wiersz, f'{tns}K_13')
+        k_13.text = '0.00'
+        
+        # K_15 - podstawa 5%
+        k_15 = etree.SubElement(wiersz, f'{tns}K_15')
+        k_15.text = format_decimal(inv.get('k_15', '0'))
+        
+        # K_16 - VAT 5%
+        k_16 = etree.SubElement(wiersz, f'{tns}K_16')
+        k_16.text = format_decimal(inv.get('k_16', '0'))
+        
+        # K_17 - podstawa 8%
+        k_17 = etree.SubElement(wiersz, f'{tns}K_17')
+        k_17.text = format_decimal(inv.get('k_17', '0'))
+        
+        # K_18 - VAT 8%
+        k_18 = etree.SubElement(wiersz, f'{tns}K_18')
+        k_18.text = format_decimal(inv.get('k_18', '0'))
+        
+        # K_19 - podstawa 23%
+        k_19 = etree.SubElement(wiersz, f'{tns}K_19')
+        k_19.text = format_decimal(inv.get('k_19', '0'))
+        
+        # K_20 - VAT 23%
+        k_20 = etree.SubElement(wiersz, f'{tns}K_20')
+        k_20.text = format_decimal(inv.get('k_20', '0'))
+    
+    # Add SprzedazCtrl
+    sprzedaz_ctrl = etree.SubElement(root, f'{tns}SprzedazCtrl')
+    
+    liczba_wierszy = etree.SubElement(sprzedaz_ctrl, f'{tns}LiczbaWierszySprzedazy')
+    liczba_wierszy.text = str(len(data.get('invoices_sale', [])))
+    
+    # Calculate total VAT
+    total_vat = 0
+    for inv in data.get('invoices_sale', []):
+        try:
+            total_vat += float(inv.get('k_20', 0) or 0)
+            total_vat += float(inv.get('k_18', 0) or 0)
+            total_vat += float(inv.get('k_16', 0) or 0)
+        except (ValueError, TypeError):
+            pass
+    
+    podatek_nalezny = etree.SubElement(sprzedaz_ctrl, f'{tns}PodatekNalezny')
+    podatek_nalezny.text = format_decimal(str(total_vat))
+    
+    return etree.tostring(root, pretty_print=True, xml_declaration=True, encoding='UTF-8')
+
+def format_decimal(value: str) -> str:
+    """Format decimal value with 2 decimal places"""
+    try:
+        return f"{float(value):.2f}"
+    except (ValueError, TypeError):
+        return "0.00"
     dates = [inv.get('data_sprzedazy') or inv.get('data_wystawienia') for inv in all_invoices if inv.get('data_sprzedazy') or inv.get('data_wystawienia')]
     if dates:
         dates = sorted([d for d in dates if d])
