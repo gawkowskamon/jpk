@@ -429,22 +429,6 @@ def format_decimal(value: str) -> str:
         return f"{float(value):.2f}"
     except (ValueError, TypeError):
         return "0.00"
-        
-        # Amounts
-        p_13_1 = etree.SubElement(faktura, 'P_13_1')
-        p_13_1.text = inv.get('k_19', '0')
-        
-        p_14_1 = etree.SubElement(faktura, 'P_14_1')
-        p_14_1.text = inv.get('k_20', '0')
-        
-        p_15 = etree.SubElement(faktura, 'P_15')
-        p_15.text = inv.get('kwota_brutto', '0')
-        
-        # Invoice type
-        rodzaj_faktury = etree.SubElement(faktura, 'RodzajFaktury')
-        rodzaj_faktury.text = 'VAT'
-    
-    return etree.tostring(root, pretty_print=True, xml_declaration=True, encoding='UTF-8')
 
 @api_router.get("/")
 async def root():
