@@ -115,10 +115,14 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
     
     # Try to extract subject info
     try:
-        podmiot = root.find('.//ns:Podmiot1', ns) or root.find('.//{*}Podmiot1')
+        podmiot = root.find('.//ns:Podmiot1', ns)
+        if podmiot is None:
+            podmiot = root.find('.//*[local-name()="Podmiot1"]')
         if podmiot is not None:
-            nip = podmiot.find('.//{*}NIP')
-            nazwa = podmiot.find('.//{*}PelnaNazwa') or podmiot.find('.//{*}Nazwa')
+            nip = podmiot.find('.//*[local-name()="NIP"]')
+            nazwa = podmiot.find('.//*[local-name()="PelnaNazwa"]')
+            if nazwa is None:
+                nazwa = podmiot.find('.//*[local-name()="Nazwa"]')
             result['subject'] = {
                 'nip': nip.text if nip is not None else '',
                 'nazwa': nazwa.text if nazwa is not None else ''
