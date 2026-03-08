@@ -103,9 +103,11 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
     
     # Try to extract header info
     try:
-        header = root.find('.//ns:Naglowek', ns) or root.find('.//{*}Naglowek')
+        header = root.find('.//ns:Naglowek', ns)
+        if header is None:
+            header = root.find('.//*[local-name()="Naglowek"]')
         if header is not None:
-            kod_formularza = header.find('.//{*}KodFormularza')
+            kod_formularza = header.find('.//*[local-name()="KodFormularza"]')
             if kod_formularza is not None:
                 result['version'] = kod_formularza.get('wersjaSchemy', 'VAT(4)')
     except Exception:
