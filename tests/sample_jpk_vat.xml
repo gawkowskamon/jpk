@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JPK xmlns="http://crd.gov.pl/wzor/2020/05/08/9393/" xmlns:etd="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2018/08/24/eD/DefinicjeTypy/">
+  <Naglowek>
+    <KodFormularza kodSystemowy="JPK_VAT (4)" wersjaSchemy="1-2E">JPK_VAT</KodFormularza>
+    <WariantFormularza>4</WariantFormularza>
+    <CelZlozenia>1</CelZlozenia>
+    <DataWytworzeniaJPK>2024-01-15T10:30:00</DataWytworzeniaJPK>
+    <DataOd>2024-01-01</DataOd>
+    <DataDo>2024-01-31</DataDo>
+  </Naglowek>
+  <Podmiot1>
+    <etd:NIP>1234567890</etd:NIP>
+    <etd:PelnaNazwa>Przykładowa Firma Sp. z o.o.</etd:PelnaNazwa>
+  </Podmiot1>
+  <SprzedazWiersz>
+    <LpSprzedazy>1</LpSprzedazy>
+    <NrKontrahenta>9876543210</NrKontrahenta>
+    <NazwaKontrahenta>ABC Handel S.A.</NazwaKontrahenta>
+    <DowodSprzedazy>FV/2024/01/001</DowodSprzedazy>
+    <DataWystawienia>2024-01-05</DataWystawienia>
+    <DataSprzedazy>2024-01-05</DataSprzedazy>
+    <K_19>1000.00</K_19>
+    <K_20>230.00</K_20>
+  </SprzedazWiersz>
+  <SprzedazWiersz>
+    <LpSprzedazy>2</LpSprzedazy>
+    <NrKontrahenta>5555666677</NrKontrahenta>
+    <NazwaKontrahenta>XYZ Produkcja Sp. z o.o.</NazwaKontrahenta>
+    <DowodSprzedazy>FV/2024/01/002</DowodSprzedazy>
+    <DataWystawienia>2024-01-10</DataWystawienia>
+    <DataSprzedazy>2024-01-10</DataSprzedazy>
+    <K_19>2500.00</K_19>
+    <K_20>575.00</K_20>
+  </SprzedazWiersz>
+  <SprzedazWiersz>
+    <LpSprzedazy>3</LpSprzedazy>
+    <NrKontrahenta>1112223334</NrKontrahenta>
+    <NazwaKontrahenta>Jan Kowalski</NazwaKontrahenta>
+    <DowodSprzedazy>FV/2024/01/003</DowodSprzedazy>
+    <DataWystawienia>2024-01-15</DataWystawienia>
+    <DataSprzedazy>2024-01-15</DataSprzedazy>
+    <K_17>500.00</K_17>
+    <K_18>40.00</K_18>
+  </SprzedazWiersz>
+  <ZakupWiersz>
+    <LpZakupu>1</LpZakupu>
+    <NrKontrahenta>7778889990</NrKontrahenta>
+    <NazwaKontrahenta>Dostawca Materiałów Sp. j.</NazwaKontrahenta>
+    <DowodZakupu>FZ/123/2024</DowodZakupu>
+    <DataWystawienia>2024-01-08</DataWystawienia>
+    <DataZakupu>2024-01-08</DataZakupu>
+    <K_42>800.00</K_42>
+    <K_43>184.00</K_43>
+  </ZakupWiersz>
+  <SprzedazCtrl>
+    <LiczbaWierszySprzedazy>3</LiczbaWierszySprzedazy>
+    <PodatekNalezny>845.00</PodatekNalezny>
+  </SprzedazCtrl>
+  <ZakupCtrl>
+    <LiczbaWierszyZakupow>1</LiczbaWierszyZakupow>
+    <PodatekNaliczony>184.00</PodatekNaliczony>
+  </ZakupCtrl>
+</JPK>
