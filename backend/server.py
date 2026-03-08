@@ -171,7 +171,8 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
     # Extract sales records (SprzedazWiersz)
     sales_rows = []
     for elem in root.iter():
-        if elem.tag.endswith('SprzedazWiersz'):
+        tag_local = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
+        if tag_local in ('SprzedazWiersz', 'Faktura', 'FakturaWiersz'):
             sales_rows.append(elem)
     
     for row in sales_rows:
@@ -182,7 +183,8 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
     # Extract purchase records (ZakupWiersz)
     purchase_rows = []
     for elem in root.iter():
-        if elem.tag.endswith('ZakupWiersz'):
+        tag_local = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
+        if tag_local in ('ZakupWiersz',):
             purchase_rows.append(elem)
     
     for row in purchase_rows:
@@ -190,7 +192,55 @@ def parse_jpk_vat(xml_content: bytes) -> dict:
         if invoice:
             result['invoices_purchase'].append(invoice)
     
+    # If no invoices found, check for JPK_FA format (reverse conversion)
+    if not result['invoices_sale'] and not result['invoices_purchase']:
+        for elem in root.iter():
+            tag_local = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
+            if tag_local == 'Faktura':
+                invoice = extract_jpk_fa_invoice(elem)
+                if invoice:
+                    result['invoices_sale'].append(invoice)
+    
     return result
+
+def extract_jpk_fa_invoice(elem) -> dict:
+    """Extract invoice data from JPK_FA Faktura element"""
+    data = {
+        'type': 'sale',
+        'lp': '',
+        'nip_kontrahenta': get_xml_text(elem, 'P_3C') or get_xml_text(elem, 'NIP') or '',
+        'nazwa_kontrahenta': get_xml_text(elem, 'P_3A') or get_xml_text(elem, 'Nazwa') or '',
+        'dowod_sprzedazy': get_xml_text(elem, 'P_2A') or get_xml_text(elem, 'NrFaktury') or '',
+        'data_wystawienia': get_xml_text(elem, 'P_1') or get_xml_text(elem, 'DataWystawienia') or '',
+        'data_sprzedazy': get_xml_text(elem, 'P_6') or get_xml_text(elem, 'DataSprzedazy') or '',
+        'k_19': get_xml_text(elem, 'P_13_1') or '0',
+        'k_20': get_xml_text(elem, 'P_14_1') or '0',
+        'k_17': get_xml_text(elem, 'P_13_2') or '0',
+        'k_18': get_xml_text(elem, 'P_14_2') or '0',
+        'k_15': get_xml_text(elem, 'P_13_3') or '0',
+        'k_16': get_xml_text(elem, 'P_14_3') or '0',
+        'k_10': '0',
+        'kwota_netto': '0',
+        'kwota_vat': '0',
+        'kwota_brutto': get_xml_text(elem, 'P_15') or '0'
+    }
+    
+    # Calculate totals
+    try:
+        netto = float(data['k_19'] or 0) + float(data['k_17'] or 0) + float(data['k_15'] or 0)
+        vat = float(data['k_20'] or 0) + float(data['k_18'] or 0) + float(data['k_16'] or 0)
+        if netto == 0 and float(data['kwota_brutto'] or 0) > 0:
+            brutto = float(data['kwota_brutto'])
+            vat = round(brutto * 0.23 / 1.23, 2)  # Estimate VAT 23%
+            netto = brutto - vat
+        data['kwota_netto'] = str(round(netto, 2))
+        data['kwota_vat'] = str(round(vat, 2))
+        if float(data['kwota_brutto']) == 0:
+            data['kwota_brutto'] = str(round(netto + vat, 2))
+    except (ValueError, TypeError):
+        pass
+    
+    return data
 
 def extract_invoice_data(row, invoice_type: str) -> dict:
     """Extract invoice data from XML row"""
