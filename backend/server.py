@@ -76,9 +76,29 @@ JPK_NAMESPACES = {
 def parse_jpk_vat(xml_content: bytes) -> dict:
     """Parse JPK_VAT XML file and extract invoice data"""
     try:
-        root = etree.fromstring(xml_content)
+        # Try to parse XML, handle encoding issues
+        if xml_content.startswith(b'\xef\xbb\xbf'):
+            xml_content = xml_content[3:]  # Remove BOM
+        
+        # Try different parsers
+        parser = etree.XMLParser(recover=True, encoding='utf-8')
+        try:
+            root = etree.fromstring(xml_content, parser=parser)
+        except:
+            # Try with different encoding
+            try:
+                xml_str = xml_content.decode('utf-8', errors='ignore')
+                root = etree.fromstring(xml_str.encode('utf-8'), parser=parser)
+            except:
+                xml_str = xml_content.decode('cp1250', errors='ignore')
+                root = etree.fromstring(xml_str.encode('utf-8'), parser=parser)
+                
     except etree.XMLSyntaxError as e:
+        logger.error(f"XML Syntax Error: {str(e)}")
         raise ValueError(f"Błąd parsowania XML: {str(e)}")
+    except Exception as e:
+        logger.error(f"General parsing error: {str(e)}")
+        raise ValueError(f"Błąd przetwarzania pliku: {str(e)}")
     
     # Detect namespace
     nsmap = root.nsmap
